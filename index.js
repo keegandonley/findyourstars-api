@@ -36,6 +36,25 @@ exports.iss = (request, response) => {
     });
 };
 
+exports.conditions = (request, response) => {
+  // CORS
+  response.set('Access-Control-Allow-Origin', "*");
+  response.set('Access-Control-Allow-Methods', 'GET');
+  console.log(request);
+
+  const lat = request.query.lat || request.body.lat || '38.338130';
+  const long = request.query.long || request.body.long || '-122.689520';
+
+  Axios.get(`https://api.darksky.net/forecast/1cea53e53fcd807974e54ed67d32a76e/${lat},${long}`)
+    .then(function (resp) {
+      response.status(200).send(resp.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+      response.status(200).send(error);
+    });
+}
+
 exports.event = (event, callback) => {
   callback();
 };
